@@ -42,4 +42,38 @@ export const logoutAction = () => {
     }
 }
 
+export const updateCartAction = (data, user_id) => {
+    return async (dispatch) => {
+        try {
+            let res = await axios.patch(`${API_URL}/users/${user_id}`, {
+                cart: data
+            })
+            dispatch({
+                type: "UPDATE_CART",
+                payload: res.data.cart
+            })
 
+            return { success: true }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export const updateAddressAction = (data, user_id) => {
+    return async (dispatch) => {
+        try {
+            let res = await axios.patch(`${API_URL}/users/${user_id}`, {
+                address: data
+            })
+            dispatch({
+                type: "UPDATE_ADDRESS",
+                payload: res.data.address
+            })
+
+            return { success: true }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
