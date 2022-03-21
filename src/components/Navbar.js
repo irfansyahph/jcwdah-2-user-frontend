@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BsSearch, BsFillCartFill } from 'react-icons/bs'
+import { BsSearch } from 'react-icons/bs'
 import { connect } from 'react-redux';
-import { Button, Badge } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { logoutAction } from '../actions'
 
 class Navbar extends React.Component {
@@ -14,15 +14,6 @@ class Navbar extends React.Component {
     btnLogOut = () => {
         localStorage.removeItem("shopToken");
         this.props.logoutAction()
-    }
-
-    totalCart = () => {
-        let total = 0
-        this.props.produk_id.forEach((value) => {
-            total += value.qty
-        });
-
-        return total
     }
 
     render() {
@@ -38,7 +29,7 @@ class Navbar extends React.Component {
                     {/* <div className="collapse navbar-collapse" id="navbarNav"> */}
                     <div className="col-md-7 input-group rounded" style={{ width: "100%" }}>
                         <input type="search" className="form-control rounded" placeholder="Search Product" ref="resi" style={{ width: "100px" }} />
-                        <Button size="sm" type="button"  >
+                        <Button className='bg-primary' size="sm" type="button" >
                             < BsSearch />
                         </Button>
                     </div>
@@ -54,11 +45,11 @@ class Navbar extends React.Component {
                                         </button>
                                         <div className="dropdown-menu">
                                             {
-                                                this.props.user_role == "user" ?
+                                                this.props.user_role === "user" ?
                                                     <div>
                                                         {/* <Link to={`/profile?user_id=${value.produk_id}`} className="dropdown-item" style={{ cursor: "pointer" }}>Profile</Link> */}
                                                         <Link to="/profile" className="dropdown-item" style={{ cursor: "pointer" }}>Profile</Link>
-                                                        <Link to="/cart" className="dropdown-item" style={{ cursor: "pointer" }}>Cart<Badge color="secondary">{this.totalCart()}</Badge></Link>
+                                                        <Link to="/cart" className="dropdown-item" style={{ cursor: "pointer" }}>Cart</Link>
                                                         <Link to="/history" className="dropdown-item" style={{ cursor: "pointer" }}>Transactions</Link>
                                                     </div>
                                                     :
@@ -88,14 +79,15 @@ class Navbar extends React.Component {
 }
 
 const mapToProps = (globalState) => {
-    // console.table(globalState.authReducer)
+    console.log(globalState.authReducer)
     return {
         user: globalState.authReducer,
         user_id: globalState.authReducer.user_id,
         email: globalState.authReducer.email,
         username: globalState.authReducer.username,
         user_role: globalState.authReducer.user_role,
-        produk_id: globalState.authReducer.cart
+        produk_id: globalState.authReducer.cart,
+        cartUser: globalState.authReducer.cart
     }
 }
 

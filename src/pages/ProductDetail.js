@@ -1,33 +1,9 @@
-import React, { useEffect, useState } from "react";
-// import { useLocation } from "react-router-dom";
-import { updateCartAction } from "../actions";
+import React from "react";
 import axios from "axios";
 import { API_URL } from "../helper";
 import { Button, Input, InputGroup } from "reactstrap";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-
-// const ProductDetail = () => {
-//     const [dataDetail, setDataDetail] = useState({})
-//     const [qty, setQty] = useState(1)
-
-
-//     let location = useLocation();
-//     console.log(location)
-
-//     useEffect(() => {
-//         getProductDetail()
-//     }, [])
-
-//     const getProductDetail = async () => {
-//         try {
-//             let response = await axios.get(`${API_URL}/products/getAll${location.search}`)
-//             setDataDetail(response.data[0])
-//             console.log(response.data)
-//         } catch (err) {
-//             console.log(err.message)
-//         }
-//     }
 
 class ProductDetail extends React.Component {
     constructor(props) {
@@ -35,7 +11,7 @@ class ProductDetail extends React.Component {
         this.state = {
             dataDetail: {},
             qty: 1,
-            redirectToCart: false
+            redirectToHome: false
         }
     }
 
@@ -71,23 +47,15 @@ class ProductDetail extends React.Component {
         try {
             if (this.props.user_id) {
                 let { dataDetail, qty } = this.state
-                // let temp = [...this.props.cartUser]
-                // temp.push({
-                //     nama: dataDetail.nama,
-                //     harga: dataDetail.harga,
-                //     qty,
-                //     subTotal: dataDetail.harga * qty,
-                //     image: dataDetail.images[0]
-                // })
                 let res = await axios.post(`${API_URL}/transactions/add-cart`, {
-                    produk_id: dataDetail.produk_id,
                     user_id: this.props.user_id,
-                    qty
+                    produk_id: dataDetail.produk_id,
+                    qty,
+                    harga_jual: dataDetail.harga_jual
                 })
                 console.log(res.data)
-                //     let res = await this.props.updateCartAction(temp, this.props.idUser)
                 if (res.data.success) {
-                    this.setState({ redirectToCart: true })
+                    this.setState({ redirectToHome: true })
                     alert("Success Add To Cart ✅")
                 }
             } else {
@@ -99,9 +67,9 @@ class ProductDetail extends React.Component {
     }
 
     render() {
-        let { dataDetail, qty, redirectToCart } = this.state
-        if (redirectToCart) {
-            return <Redirect to="/cart" />
+        let { dataDetail, qty, redirectToHome } = this.state
+        if (redirectToHome) {
+            return <Redirect to="/" />
         }
         return (
             <div className="container p-2" >
@@ -153,4 +121,4 @@ const mapToProps = (globalState) => {
     }
 }
 
-export default connect(mapToProps, { updateCartAction })(ProductDetail);
+export default connect(mapToProps)(ProductDetail);

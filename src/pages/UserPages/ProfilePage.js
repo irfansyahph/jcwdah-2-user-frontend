@@ -2,7 +2,6 @@ import React from 'react';
 import { BsFillPinMapFill } from "react-icons/bs";
 import axios from 'axios';
 import { API_URL } from '../../helper';
-import { updateAddressAction } from '../../actions';
 import { connect } from 'react-redux';
 
 class AddressPage extends React.Component {
@@ -15,6 +14,7 @@ class AddressPage extends React.Component {
 
     componentDidMount() {
         this.getAddress()
+        console.log(this.state.dataAddress)
     }
 
     getAddress = async () => {
@@ -72,4 +72,4 @@ const mapToProps = (globalState) => {
     }
 }
 
-export default connect(mapToProps, { updateAddressAction })(AddressPage);
+export default connect(mapToProps)(AddressPage);

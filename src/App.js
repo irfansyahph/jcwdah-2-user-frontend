@@ -4,10 +4,13 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProductPage from './pages/ProductPage';
 import ProductDetail from './pages/ProductDetail';
+import SearchPage from './pages/SearchPage';
 import SignUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
 import VerificationPage from './pages/VerificationPage';
 import ForgotPage from './pages/ForgotPage';
+import ResetPage from './pages/ResetPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 import ProfilePage from './pages/UserPages/ProfilePage';
 import CartPage from './pages/UserPages/CartPage';
@@ -47,11 +50,14 @@ class App extends React.Component {
           <Switch>
             <Route path="/" component={LandingPage} exact />
             <Route path="/products" component={ProductPage} />
+            <Route path="/search" component={SearchPage} />
             <Route path="/product-detail" component={ProductDetail} />
             <Route path="/signup" component={SignUpPage} />
             <Route path="/signin" component={SignInPage} />
-            <Route path="/forgot" component={ForgotPage} />
+            <Route path="/forgot-password" component={ForgotPage} />
+            <Route path="/reset-password" component={ResetPage} />
             <Route path="/verification" component={VerificationPage} />
+            <Route path="/checkout" component={CheckoutPage} />
             {
               this.props.user_role == "Admin" ?
                 <>

@@ -1,15 +1,16 @@
 import React from 'react';
-import { Button, Input, FormGroup, Label, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Input, FormGroup, Label, InputGroup } from 'reactstrap';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { updateCartAction } from '../../actions';
 import { API_URL } from '../../helper';
+import { Redirect } from 'react-router-dom';
 
 class CartPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataCart: []
+            dataCart: [],
+            redirectToCart: false
         }
     }
 
@@ -34,27 +35,62 @@ class CartPage extends React.Component {
         }
     }
 
-    btInc = (idx) => {
-        let { dataCart } = this.state
-        let temp = [...dataCart]
-        temp[idx].qty += 1
-        this.setState({ dataCart: temp })
+    btInc = (cart_id, produk_id, qty) => {
+        axios.patch(`${API_URL}/transactions/update-cart`, {
+            cart_id: cart_id,
+            produk_id: produk_id,
+            qty: qty + 1
+        }).then((res) => {
+            this.getCart()
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
-    btDec = (idx) => {
-        let { dataCart } = this.state
-        let temp = [...dataCart]
-        temp[idx].qty -= 1
-        this.setState({ dataCart: temp })
+    btDec = (cart_id, produk_id, qty) => {
+        axios.patch(`${API_URL}/transactions/update-cart`, {
+            cart_id: cart_id,
+            produk_id: produk_id,
+            qty: qty - 1
+        }).then((res) => {
+            this.getCart()
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
-    btDeleteCart = (cart_id) => {
-        axios.delete(`${API_URL}/transactions/delete/${cart_id}`)
+    btDeleteProduk = (cart_id, produk_id) => {
+        axios.delete(`${API_URL}/transactions/delete-cart/${cart_id}/${produk_id}`)
             .then((res) => {
                 this.getCart()
             }).catch((err) => {
                 console.log(err);
             })
+    }
+
+    btCheckOut = (cart_id) => {
+        this.setState({ redirectToCart: true })
+        alert("Checkout Berhasil ✅")
+        // axios.post(`${API_URL}/transactions/checkout`, {
+        //     user_id: this.props.user_id,
+        //     produk_id: this.state.dataCart[0].produk_id,
+        //     nama_produk: this.state.dataCart[0].nama_produk,
+        //     qty: this.state.dataCart[0].qty,
+        //     harga_jual: this.state.dataCart[0].harga_jual,
+        //     ongkos_kirim: this.totalPayment().ongkir,
+        //     total_tagihan: this.totalPayment().total,
+        //     galeri_produk: this.state.dataCart[0].galeri_produk
+        // }).then((res) => {
+        //     axios.post(`${API_URL}/transactions/payment`, {
+        //         nama_produk: this.state.dataCart[0].nama_produk,
+        //         total_tagihan: this.totalPayment().total
+        //     })
+        //     this.getCart()
+        //     this.setState({ redirectToCart: true })
+        //     alert("Checkout Berhasil ✅")
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
     }
 
     totalPayment = () => {
@@ -76,19 +112,23 @@ class CartPage extends React.Component {
                 <div className="col-md-5 d-flex align-items-center">
                     <div className="d-flex justify-content-between align-items-center">
                         <InputGroup style={{ width: "45%", marginLeft: "20px" }}>
-                            <Button onClick={() => this.btDec(index)}>-</Button>
+                            <Button onClick={() => this.btDec(item.cart_id, item.produk_id, item.qty)}>-</Button>
                             <Input type="number" placeholder="qty" value={item.qty} />
-                            <Button onClick={() => this.btInc(index)}>+</Button>
+                            <Button onClick={() => this.btInc(item.cart_id, item.produk_id, item.qty)}>+</Button>
                         </InputGroup>
                         <h4>IDR. {(item.harga_jual * item.qty).toLocaleString()}</h4>
                     </div>
-                    <Button color="warning" onClick={() => this.btDeleteCart(item.cart_id)} style={{ border: 'none', float: 'right', marginLeft: "1vw" }} >Remove</Button>
+                    <Button color="warning" onClick={() => this.btDeleteProduk(item.cart_id, item.produk_id)} style={{ border: 'none', float: 'right', marginLeft: "1vw" }} >Remove</Button>
                 </div>
+
             </div>
         })
     }
 
     render() {
+        if (this.state.redirectToCart) {
+            return <Redirect to="/checkout" />
+        }
         return (
             <div className="p-5">
                 <h1 className="text-center mt-5">Keranjang Belanja</h1>
@@ -104,12 +144,8 @@ class CartPage extends React.Component {
                                 <Label for="ongkir">Biaya Pengiriman</Label>
                                 <Input type="text" id="ongkir" disabled value={this.totalPayment().ongkir} innerRef={elemen => this.ongkir = elemen} />
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="note">Notes</Label>
-                                <Input type="textarea" id="note" innerRef={elemen => this.note = elemen} />
-                            </FormGroup>
                             <div className="d-flex justify-content-end">
-                                <Button type="button" color="success" onClick={this.btCheckOut}>Checkout</Button>
+                                <Button type="button" color="success" onClick={() => this.btCheckOut()}>Checkout</Button>
                             </div>
                         </div>
                     </div>
@@ -122,9 +158,10 @@ class CartPage extends React.Component {
 const mapToProps = (globalState) => {
     return {
         cart_user: globalState.authReducer.cart,
+        cart_id: globalState.authReducer.cart,
         user_id: globalState.authReducer.user_id,
         email: globalState.authReducer.email
     }
 }
 
-export default connect(mapToProps, { updateCartAction })(CartPage);
+export default connect(mapToProps)(CartPage);

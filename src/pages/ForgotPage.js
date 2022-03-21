@@ -1,46 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { MdEmail } from 'react-icons/md';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import { connect, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { API_URL } from '../helper';
+import Swal from "sweetalert2";
 
-class ForgotPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
+function ForgotPage() {
+    const [email, setEmail] = useState("");
+    const onChangeEmail = (e) => setEmail(e.target.value);
 
-    btnForgotPass = () => {
-        let email = this.refs.email.value
+    const onSubmitForm = (e) => {
+        e.preventDefault();
 
-        axios.post(`${API_URL}/users/forgot`, {
-            email
-        })
+        axios
+            .post(`${API_URL}/users/forgotPassword`, { email })
             .then((res) => {
-                console.log(res.data)
-
-            }).catch((err) => {
-                console.log(err)
+                Swal.fire("Reset Password!", "reset Password berhasil!", "success");
+                console.log("success");
             })
-    }
+            .catch((err) => {
+                Swal.fire(
+                    "Reset Password Failed!",
+                    "Email anda tidak terdaftar",
+                    "error");
+                console.log(err);
+            });
+    };
 
-    render() {
 
-        return (
+    return (
 
-            <div className="m-auto" style={{ fontSize: "20px", fontFamily: "poppins", width: "30%" }}>
-                <h1 className='text-center font-weight-lighter py-3' style={{ fontSize: '18px' }}>Forgot Password</h1>
-                <div className="box py-3" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <i className='form-control' style={{ width: "10%" }}><MdEmail /></i>
-                    <input type="text" className="form-control" placeholder="Email" ref="email"></input>
-                </div>
-
-                <button type="button" className='btn btn-outline-secondary' style={{ float: "right", }} onClick={this.btnForgotPass} >Ubah Password</button>
+        <div className="m-auto" style={{ fontSize: "20px", fontFamily: "poppins", width: "30%" }}>
+            <h1 className='text-center font-weight-lighter py-3' style={{ fontSize: '18px' }}>Lupa Password</h1>
+            <div className="box py-3" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <i className='form-control' style={{ width: "10%" }}><MdEmail /></i>
+                <input type="email" className="form-control" placeholder="Email" onChange={onChangeEmail} id="email" defaultValue={email}></input>
             </div>
 
-        );
-    }
-}
+            <button type="submit" className='btn btn-outline-secondary' style={{ float: "right", }} onClick={onSubmitForm} >Submit
+            </button>
+        </div>
 
+    );
+}
 export default ForgotPage;

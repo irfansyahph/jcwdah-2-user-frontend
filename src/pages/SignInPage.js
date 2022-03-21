@@ -75,7 +75,7 @@ class SignInPage extends React.Component {
                 </div>
                 <button type="button" className='btn btn-outline-secondary' style={{ float: "right" }} onClick={this.btnSignIn} >Masukkan</button>
                 <p className="forgot-password text-left" style={{float:"left", fontSize:"smaller"}}>
-                    <Link to={'/forgot'}>Lupa password?</Link>
+                    <Link to={'/forgot-password'}>Lupa password?</Link>
                 </p>
             </div>
         );

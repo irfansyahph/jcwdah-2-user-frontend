@@ -10,11 +10,9 @@ const INITIAL_STATE = {
 export const authReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case "LOGIN_SUCCESS":
-            console.log("REDUCER ==> Data dari authAction:", action.payload)
+            // console.log("REDUCER ==> Data dari authAction:", action.payload)
             return { ...state, ...action.payload }
         case "UPDATE_CART":
-            return { ...state, cart: action.payload }
-        case "UPDATE_ADDRESS":
             return { ...state, cart: action.payload }
         case "GET_TRANSACTIONS":
             console.log("GET TRANSACTIONS ==>", action.payload)
