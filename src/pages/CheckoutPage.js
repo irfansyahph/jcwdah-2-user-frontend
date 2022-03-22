@@ -110,7 +110,7 @@ class CheckoutPage extends React.Component {
                                 <Label for="ongkir">Biaya Pengiriman</Label>
                                 <Input type="text" id="ongkir" disabled value={this.totalPayment().ongkir} innerRef={elemen => this.ongkir = elemen} />
                             </FormGroup>
-                            <Button className="primary" onClick={() => this.btBayar(this.cart_id)}>Bayar</Button>
+                            <Button className="primary" onClick={() => this.btBayar(this.state.cart_id)}>Bayar</Button>
                         </div>
                     </div>
                 </div>

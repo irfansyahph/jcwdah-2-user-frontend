@@ -22,7 +22,8 @@ class PaymentPage extends React.Component {
     }
 
     getPayment = () => {
-        axios.get(`${API_URL}/transactions/get-payment`)
+        axios.get(`${API_URL}/transactions/get-payment`, {
+        })
             .then((res) => {
                 this.setState({ payment: res.data })
                 // console.log(res.data)
@@ -39,7 +40,7 @@ class PaymentPage extends React.Component {
         }
     }
 
-    btKonfirmasi = () => {
+    btKonfirmasi = (cart_id) => {
         let formData = new FormData()
         let data = {
             user_id: this.props.user_id
@@ -49,6 +50,9 @@ class PaymentPage extends React.Component {
 
         axios.post(`${API_URL}/transactions/add-bukti-pembayaran`, formData)
             .then((res) => {
+                axios.patch(`${API_URL}/transactions/update-status-pembayaran`, {
+                    cart_id: cart_id
+                })
                 this.setState({ redirectToHistoryPage: true })
                 alert("Data Tersimpan ✅")
             }).catch((err) => {
@@ -89,7 +93,7 @@ class PaymentPage extends React.Component {
                     </div>
                 </div>
                 <div className="row mt-5">
-                    <Button type="button" color="success" size="md" style={{ width: "20%", margin: "auto" }} onClick={this.btKonfirmasi}>Konfirmasi</Button>
+                    <Button type="button" color="success" size="md" style={{ width: "20%", margin: "auto" }} onClick={() => this.btKonfirmasi(value.cart_id)}>Konfirmasi</Button>
                 </div>
             </div>
         })

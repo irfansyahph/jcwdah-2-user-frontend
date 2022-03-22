@@ -32,6 +32,10 @@ class HistoryPage extends React.Component {
                     <div><img src={value.galeri_produk} width="70%" alt={value.nama_produk} /></div>
                 </div>
                 <div className='col-md-2 m-auto text-center'>
+                    <div><b>Tanggal Transaksi</b></div>
+                    <div>{value.date}</div>
+                </div>
+                <div className='col-md-2 m-auto text-center'>
                     <div><b>Nama Produk</b></div>
                     <div>{value.nama_produk}</div>
                 </div>
@@ -39,8 +43,8 @@ class HistoryPage extends React.Component {
                     <div><b>Harga Produk</b></div>
                     <div>Rp {value.harga_jual}</div>
                 </div>
-                <h5 className='col-md-5 m-auto text-center'>
-                    <div><Badge color="success">{value.nama_status}</Badge></div>
+                <h5 className='col-md-3 m-auto text-center'>
+                    <div><Badge color={value.nama_status === "Menunggu Pembayaran" ? "info" : value.nama_status === "Menunggu Konfirmasi" ? "warning" : value.nama_status === "Transaksi Berhasil" ? "success" : "danger"}>{value.nama_status}</Badge></div>
                 </h5>
             </div>
         })

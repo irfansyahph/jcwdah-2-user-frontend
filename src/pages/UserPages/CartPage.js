@@ -112,9 +112,9 @@ class CartPage extends React.Component {
                 <div className="col-md-5 d-flex align-items-center">
                     <div className="d-flex justify-content-between align-items-center">
                         <InputGroup style={{ width: "45%", marginLeft: "20px" }}>
-                            <Button onClick={() => this.btDec(item.cart_id, item.produk_id, item.qty)}>-</Button>
+                            <Button disabled={item.qty === 1 ? true : false} onClick={() => this.btDec(item.cart_id, item.produk_id, item.qty)}>-</Button>
                             <Input type="number" placeholder="qty" value={item.qty} />
-                            <Button onClick={() => this.btInc(item.cart_id, item.produk_id, item.qty)}>+</Button>
+                            <Button disabled={item.qty >= item.stok ? true : false} onClick={() => this.btInc(item.cart_id, item.produk_id, item.qty)}>+</Button>
                         </InputGroup>
                         <h4>IDR. {(item.harga_jual * item.qty).toLocaleString()}</h4>
                     </div>

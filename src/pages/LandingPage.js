@@ -31,7 +31,10 @@ class LandingPage extends React.Component {
             return <div key={index} className="col-md-3 px-3 py-3">
                 <Card className="shadow rounded" style={{ fontFamily: "poppins" }}>
                     <Link to={`/product-detail?produk_id=${value.produk_id}`} style={{ textDecoration: "none", color: "black" }}>
-                        <CardImg width="100%" src={value.galeri_produk} alt={`image ${value.nama_produk}`} /><hr style={{ marginTop: "0px" }} />
+                        <div className="text-center" style={{height:"280px"}}>
+                            <CardImg style={{maxHeight:"290px"}} src={value.galeri_produk} alt={`image ${value.nama_produk}`} />
+                        </div>
+                        <hr style={{ marginTop: "0px" }} />
                         <CardBody>
                             <CardTitle>{value.nama_produk}</CardTitle>
                             <CardText style={{ fontWeight: "bold" }} >IDR. {value.harga_jual.toLocaleString()}</CardText>

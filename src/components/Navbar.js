@@ -4,11 +4,13 @@ import { BsSearch } from 'react-icons/bs'
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import { logoutAction } from '../actions'
+import { Redirect } from 'react-router-dom';
 
 class Navbar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+        }
     }
 
     btnLogOut = () => {
@@ -17,6 +19,7 @@ class Navbar extends React.Component {
     }
 
     render() {
+
         return (
             <nav className={`navbar navbar-expand-lg fixed-top`} style={{ fontFamily: "poppins", backgroundColor: "#B0E0E6" }}>
                 <div className='container'>
